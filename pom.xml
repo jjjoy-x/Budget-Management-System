@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mycompany</groupId>
+    <artifactId>CPT206CW</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+    <!-- JUnit 5 API 和运行器 -->
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.10.0</version>
+        <scope>test</scope>
+    </dependency>
+   </dependencies>
+
+    <build>
+    <plugins>
+      <!-- Maven Surefire Plugin 是运行 JUnit 测试所必需的 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+            <useModulePath>false</useModulePath> <!-- 尤其在 Java 9+ -->
+        </configuration>
+      </plugin>
+       
+      <plugin>  
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.10</version> <!-- 可选更新为最新版本 -->
+        <executions>
+            <!-- 启用代码覆盖分析 -->
+            <execution>
+                <goals>
+                    <goal>prepare-agent</goal>
+                </goals>
+            </execution>
+            <!-- 生成报告 -->
+            <execution>
+                <id>report</id>
+                <phase>verify</phase>
+                <goals>
+                    <goal>report</goal>
+                </goals>
+            </execution>
+        </executions>
+       </plugin>
+      
+       <!-- 3. JavaDoc Plugin（生成注释文档） -->
+       <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.6.3</version>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+       
+    </plugins>
+  </build> 
+  
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <exec.mainClass>com.mycompany.cpt206cw.CPT206CW</exec.mainClass>
+    </properties>
+</project>

@@ -1,0 +1,46 @@
+@options
+@packages
+-encoding
+'UTF-8'
+-protected
+-source
+'21'
+-sourcepath
+'C:/Users/13770/Documents/NetBeansProjects/CPT206CW/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2025. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/13770/Documents/NetBeansProjects/CPT206CW/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'CPT206CW 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'CPT206CW 1.0-SNAPSHOT API'
+cpt206cw3
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\src\main\java = 1746869812988
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\allclasses-index.html = 1747454769209
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\allpackages-index.html = 1747454769211
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\copy.svg = 1747454769242
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\element-list = 1747454769120
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\help-doc.html = 1747454769235
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\index-all.html = 1747454769228
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\index.html = 1747454769232
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\link.svg = 1747454769242
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\member-search-index.js = 1747454769216
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\module-search-index.js = 1747454769212
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\overview-tree.html = 1747454769189
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\package-search-index.js = 1747454769213
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\script.js = 1747454769242
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\search-page.js = 1747454769247
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\search.html = 1747454769229
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\search.js = 1747454769242
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\serialized-form.html = 1747454769149
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\stylesheet.css = 1747454769239
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\tag-search-index.js = 1747454769217
+C:\Users\13770\Documents\NetBeansProjects\CPT206CW\target\site\apidocs\type-search-index.js = 1747454769214

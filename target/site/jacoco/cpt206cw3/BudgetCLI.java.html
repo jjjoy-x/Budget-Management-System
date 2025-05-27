@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetCLI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CPT206CW</a> &gt; <a href="index.source.html" class="el_package">cpt206cw3</a> &gt; <span class="el_source">BudgetCLI.java</span></div><h1>BudgetCLI.java</h1><pre class="source lang-java linenums">package cpt206cw3;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.Scanner;
+
+public class BudgetCLI {
+    private final BudgetManager manager;
+    private final Scanner scanner;
+    private boolean running;
+    
+<span class="nc" id="L16">    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;);</span>
+<span class="nc" id="L17">    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern(&quot;HH:mm&quot;);</span>
+    
+<span class="nc" id="L19">    public BudgetCLI() {</span>
+<span class="nc" id="L20">        this.manager = new BudgetManager();</span>
+<span class="nc" id="L21">        this.scanner = new Scanner(System.in);</span>
+<span class="nc" id="L22">        this.running = true;</span>
+<span class="nc" id="L23">    }</span>
+    
+    public void start() {
+<span class="nc" id="L26">        System.out.println(&quot;=== Budget Planning and Management System ===&quot;);</span>
+<span class="nc" id="L27">        System.out.println(&quot;Type 'help' for a list of commands&quot;);</span>
+        
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        while (running) {</span>
+<span class="nc" id="L30">            System.out.print(&quot;\n&gt; &quot;);</span>
+<span class="nc" id="L31">            String command = scanner.nextLine().trim().toLowerCase();</span>
+            
+            try {
+<span class="nc bnc" id="L34" title="All 14 branches missed.">                switch (command) {</span>
+                    case &quot;help&quot;:
+<span class="nc" id="L36">                        showHelp();</span>
+<span class="nc" id="L37">                        break;</span>
+                    case &quot;add income&quot;:
+<span class="nc" id="L39">                        addIncome();</span>
+<span class="nc" id="L40">                        break;</span>
+                    case &quot;add expense&quot;:
+<span class="nc" id="L42">                        addExpense();</span>
+<span class="nc" id="L43">                        break;</span>
+                    case &quot;add category&quot;:
+<span class="nc" id="L45">                        addCategory();</span>
+<span class="nc" id="L46">                        break;</span>
+                    case &quot;remove category&quot;:
+<span class="nc" id="L48">                        removeCategory();</span>
+<span class="nc" id="L49">                        break;</span>
+                    case &quot;list categories&quot;:
+<span class="nc" id="L51">                        listCategories();</span>
+<span class="nc" id="L52">                        break;</span>
+                    case &quot;list transactions&quot;:
+<span class="nc" id="L54">                        listTransactions();</span>
+<span class="nc" id="L55">                        break;</span>
+                    case &quot;list expenses by category&quot;:
+<span class="nc" id="L57">                        listExpensesByCategory();</span>
+<span class="nc" id="L58">                        break;</span>
+                    case &quot;list large expenses&quot;:
+<span class="nc" id="L60">                        listLargeExpenses();</span>
+<span class="nc" id="L61">                        break;</span>
+                    case &quot;list transactions by date&quot;:
+<span class="nc" id="L63">                        listTransactionsByDate();</span>
+<span class="nc" id="L64">                        break;</span>
+                    case &quot;net earnings&quot;:
+<span class="nc" id="L66">                        calculateNetEarnings();</span>
+<span class="nc" id="L67">                        break;</span>
+                    case &quot;reset category&quot;:
+<span class="nc" id="L69">                        resetCategory();</span>
+<span class="nc" id="L70">                        break;</span>
+                    case &quot;exit&quot;:
+<span class="nc" id="L72">                        exit();</span>
+<span class="nc" id="L73">                        break;</span>
+                    default:
+<span class="nc" id="L75">                        System.out.println(&quot;Unknown command. Type 'help' for available commands.&quot;);</span>
+                }
+<span class="nc" id="L77">            } catch (Exception e) {</span>
+<span class="nc" id="L78">                System.out.println(&quot;Error: &quot; + e.getMessage());</span>
+<span class="nc" id="L79">            }</span>
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">    }</span>
+    
+    private void showHelp() {
+<span class="nc" id="L84">        System.out.println(&quot;\nAvailable commands:&quot;);</span>
+<span class="nc" id="L85">        System.out.println(&quot;  help                      - Show this help message&quot;);</span>
+<span class="nc" id="L86">        System.out.println(&quot;  add income                - Add a new income transaction&quot;);</span>
+<span class="nc" id="L87">        System.out.println(&quot;  add expense               - Add a new expense transaction&quot;);</span>
+<span class="nc" id="L88">        System.out.println(&quot;  add category              - Add a new budget category&quot;);</span>
+<span class="nc" id="L89">        System.out.println(&quot;  remove category           - Remove a budget category&quot;);</span>
+<span class="nc" id="L90">        System.out.println(&quot;  list categories           - List all budget categories&quot;);</span>
+<span class="nc" id="L91">        System.out.println(&quot;  list transactions         - List all transactions&quot;);</span>
+<span class="nc" id="L92">        System.out.println(&quot;  list expenses by category - List expenses for a category&quot;);</span>
+<span class="nc" id="L93">        System.out.println(&quot;  list large expenses       - List expenses exceeding amount&quot;);</span>
+<span class="nc" id="L94">        System.out.println(&quot;  list transactions by date - List transactions in date range&quot;);</span>
+<span class="nc" id="L95">        System.out.println(&quot;  net earnings              - Calculate net earnings for period&quot;);</span>
+<span class="nc" id="L96">        System.out.println(&quot;  reset category            - Reset expenditure for a category&quot;);</span>
+<span class="nc" id="L97">        System.out.println(&quot;  exit                      - Exit the program&quot;);</span>
+<span class="nc" id="L98">    }</span>
+    
+    private void addIncome() {
+<span class="nc" id="L101">        System.out.println(&quot;\nAdd New Income&quot;);</span>
+        
+<span class="nc" id="L103">        double amount = promptDouble(&quot;Amount: &quot;);</span>
+<span class="nc" id="L104">        LocalDateTime dateTime = promptDateTime();</span>
+<span class="nc" id="L105">        String source = promptString(&quot;Source (salary/gift/bonus/other): &quot;);</span>
+        
+<span class="nc" id="L107">        manager.addIncome(amount, dateTime, source);</span>
+<span class="nc" id="L108">        System.out.println(&quot;Income added successfully.&quot;);</span>
+<span class="nc" id="L109">    }</span>
+    
+    private void addExpense() {
+<span class="nc" id="L112">        System.out.println(&quot;\nAdd New Expense&quot;);</span>
+        
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (manager.getAllCategories().isEmpty()) {</span>
+<span class="nc" id="L115">            System.out.println(&quot;No categories exist. Please create a category first.&quot;);</span>
+<span class="nc" id="L116">            return;</span>
+        }
+        
+<span class="nc" id="L119">        double amount = promptDouble(&quot;Amount: &quot;);</span>
+<span class="nc" id="L120">        LocalDateTime dateTime = promptDateTime();</span>
+        
+        // Show available payment methods
+<span class="nc" id="L123">        System.out.println(&quot;Available payment methods:&quot;);</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        for (Expense.PaymentMethod method : Expense.PaymentMethod.values()) {</span>
+<span class="nc" id="L125">            System.out.printf(&quot;- %s (%.1f%% fee)\n&quot;, </span>
+<span class="nc" id="L126">                method.name(), method.getFeePercentage() * 100);</span>
+        }
+        
+<span class="nc" id="L129">        Expense.PaymentMethod method = promptPaymentMethod();</span>
+<span class="nc" id="L130">        String category = promptCategory();</span>
+        
+        try {
+<span class="nc" id="L133">            manager.addExpense(amount, dateTime, method, category);</span>
+<span class="nc" id="L134">            System.out.println(&quot;Expense added successfully.&quot;);</span>
+<span class="nc" id="L135">        } catch (MonthlyLimitExceededException e) {</span>
+<span class="nc" id="L136">            System.out.println(&quot;Cannot add expense: &quot; + e.getMessage());</span>
+<span class="nc" id="L137">        }</span>
+<span class="nc" id="L138">    }</span>
+    
+    private void addCategory() {
+<span class="nc" id="L141">        System.out.println(&quot;\nAdd New Category&quot;);</span>
+<span class="nc" id="L142">        String name = promptString(&quot;Category name: &quot;);</span>
+<span class="nc" id="L143">        double limit = promptDouble(&quot;Monthly limit: &quot;);</span>
+        
+<span class="nc" id="L145">        manager.addCategory(name, limit);</span>
+<span class="nc" id="L146">        System.out.println(&quot;Category added successfully.&quot;);</span>
+<span class="nc" id="L147">    }</span>
+    
+    private void removeCategory() {
+<span class="nc" id="L150">        System.out.println(&quot;\nRemove Category&quot;);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (manager.getAllCategories().isEmpty()) {</span>
+<span class="nc" id="L152">            System.out.println(&quot;No categories exist.&quot;);</span>
+<span class="nc" id="L153">            return;</span>
+        }
+        
+<span class="nc" id="L156">        String name = promptCategory();</span>
+<span class="nc" id="L157">        manager.removeCategory(name);</span>
+<span class="nc" id="L158">        System.out.println(&quot;Category removed successfully.&quot;);</span>
+<span class="nc" id="L159">    }</span>
+    
+    private void listCategories() {
+<span class="nc" id="L162">        System.out.println(&quot;\nBudget Categories:&quot;);</span>
+<span class="nc" id="L163">        List&lt;BudgetCategory&gt; categories = manager.getAllCategories();</span>
+        
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (categories.isEmpty()) {</span>
+<span class="nc" id="L166">            System.out.println(&quot;No categories exist.&quot;);</span>
+<span class="nc" id="L167">            return;</span>
+        }
+        
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        for (BudgetCategory category : categories) {</span>
+<span class="nc" id="L171">            System.out.printf(&quot;- %s (Limit: %.2f, Current: %.2f, %s)\n&quot;,</span>
+<span class="nc" id="L172">                category.getName(),</span>
+<span class="nc" id="L173">                category.getMonthlyLimit(),</span>
+<span class="nc" id="L174">                category.getCurrentExpenditure(),</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                category.isOverLimit() ? &quot;OVER LIMIT!&quot; : &quot;within limit&quot;);</span>
+<span class="nc" id="L176">        }</span>
+<span class="nc" id="L177">    }</span>
+    
+    private void listTransactions() {
+<span class="nc" id="L180">        System.out.println(&quot;\nAll Transactions:&quot;);</span>
+<span class="nc" id="L181">        List&lt;Transaction&gt; transactions = manager.getAllTransactions();</span>
+        
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (transactions.isEmpty()) {</span>
+<span class="nc" id="L184">            System.out.println(&quot;No transactions recorded.&quot;);</span>
+<span class="nc" id="L185">            return;</span>
+        }
+        
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        for (Transaction t : transactions) {</span>
+<span class="nc" id="L189">            System.out.println(t);</span>
+<span class="nc" id="L190">        }</span>
+<span class="nc" id="L191">    }</span>
+    
+    private void listExpensesByCategory() {
+<span class="nc" id="L194">        System.out.println(&quot;\nExpenses by Category&quot;);</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        if (manager.getAllCategories().isEmpty()) {</span>
+<span class="nc" id="L196">            System.out.println(&quot;No categories exist.&quot;);</span>
+<span class="nc" id="L197">            return;</span>
+        }
+        
+<span class="nc" id="L200">        String category = promptCategory();</span>
+<span class="nc" id="L201">        List&lt;Expense&gt; expenses = manager.getExpensesByCategory(category);</span>
+        
+<span class="nc bnc" id="L203" title="All 2 branches missed.">        if (expenses.isEmpty()) {</span>
+<span class="nc" id="L204">            System.out.println(&quot;No expenses recorded for this category.&quot;);</span>
+<span class="nc" id="L205">            return;</span>
+        }
+        
+<span class="nc" id="L208">        System.out.println(&quot;Expenses for category '&quot; + category + &quot;':&quot;);</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        for (Expense e : expenses) {</span>
+<span class="nc" id="L210">            System.out.printf(&quot;- %s (Payment: %s, Effective: %.2f)\n&quot;,</span>
+<span class="nc" id="L211">                e.getDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),</span>
+<span class="nc" id="L212">                e.getPaymentMethod(),</span>
+<span class="nc" id="L213">                e.getEffectiveAmount());</span>
+<span class="nc" id="L214">        }</span>
+<span class="nc" id="L215">    }</span>
+    
+    private void listLargeExpenses() {
+<span class="nc" id="L218">        System.out.println(&quot;\nLarge Expenses&quot;);</span>
+<span class="nc" id="L219">        double threshold = promptDouble(&quot;Enter amount threshold: &quot;);</span>
+        
+<span class="nc" id="L221">        List&lt;Expense&gt; expenses = manager.getExpensesExceedingAmount(threshold);</span>
+        
+<span class="nc bnc" id="L223" title="All 2 branches missed.">        if (expenses.isEmpty()) {</span>
+<span class="nc" id="L224">            System.out.println(&quot;No expenses exceed &quot; + threshold);</span>
+<span class="nc" id="L225">            return;</span>
+        }
+        
+<span class="nc" id="L228">        System.out.println(&quot;Expenses exceeding &quot; + threshold + &quot;:&quot;);</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        for (Expense e : expenses) {</span>
+<span class="nc" id="L230">            System.out.printf(&quot;- %.2f on %s (%s)\n&quot;,</span>
+<span class="nc" id="L231">                e.getAmount(),</span>
+<span class="nc" id="L232">                e.getDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE),</span>
+<span class="nc" id="L233">                e.getCategory());</span>
+<span class="nc" id="L234">        }</span>
+<span class="nc" id="L235">    }</span>
+    
+    private void listTransactionsByDate() {
+<span class="nc" id="L238">        System.out.println(&quot;\nTransactions by Date Range&quot;);</span>
+<span class="nc" id="L239">        LocalDateTime start = promptDateTime(&quot;Enter start date (yyyy-mm-dd): &quot;);</span>
+<span class="nc" id="L240">        LocalDateTime end = promptDateTime(&quot;Enter end date (yyyy-mm-dd): &quot;);</span>
+        
+<span class="nc" id="L242">        List&lt;Transaction&gt; transactions = manager.getTransactionsInPeriod(start, end);</span>
+        
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        if (transactions.isEmpty()) {</span>
+<span class="nc" id="L245">            System.out.println(&quot;No transactions in this period.&quot;);</span>
+<span class="nc" id="L246">            return;</span>
+        }
+        
+<span class="nc" id="L249">        System.out.println(&quot;Transactions between &quot; + start.toLocalDate() + &quot; and &quot; + end.toLocalDate() + &quot;:&quot;);</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        for (Transaction t : transactions) {</span>
+<span class="nc" id="L251">            System.out.printf(&quot;- %s: %.2f (%s)\n&quot;,</span>
+<span class="nc" id="L252">                t.getDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),</span>
+<span class="nc" id="L253">                t.getEffectiveAmount(),</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">                t instanceof Income ? &quot;Income&quot; : &quot;Expense&quot;);</span>
+<span class="nc" id="L255">        }</span>
+<span class="nc" id="L256">    }</span>
+    
+    private void calculateNetEarnings() {
+<span class="nc" id="L259">        System.out.println(&quot;\nNet Earnings Calculation&quot;);</span>
+<span class="nc" id="L260">        LocalDateTime start = promptDateTime(&quot;Enter start date (yyyy-mm-dd): &quot;);</span>
+<span class="nc" id="L261">        LocalDateTime end = promptDateTime(&quot;Enter end date (yyyy-mm-dd): &quot;);</span>
+        
+<span class="nc" id="L263">        double net = manager.getNetEarnings(start, end);</span>
+<span class="nc" id="L264">        System.out.printf(&quot;Net earnings for period: %.2f\n&quot;, net);</span>
+<span class="nc" id="L265">    }</span>
+    
+    private void resetCategory() {
+<span class="nc" id="L268">        System.out.println(&quot;\nReset Category Expenditure&quot;);</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        if (manager.getAllCategories().isEmpty()) {</span>
+<span class="nc" id="L270">            System.out.println(&quot;No categories exist.&quot;);</span>
+<span class="nc" id="L271">            return;</span>
+        }
+        
+<span class="nc" id="L274">        String name = promptCategory();</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">        for (BudgetCategory cat : manager.getAllCategories()) {</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">            if (cat.getName().equals(name)) {</span>
+<span class="nc" id="L277">                cat.resetExpenditure();</span>
+<span class="nc" id="L278">                System.out.println(&quot;Expenditure reset for category '&quot; + name + &quot;'&quot;);</span>
+<span class="nc" id="L279">                return;</span>
+            }
+<span class="nc" id="L281">        }</span>
+<span class="nc" id="L282">    }</span>
+    
+    private void exit() {
+<span class="nc" id="L285">        running = false;</span>
+<span class="nc" id="L286">        System.out.println(&quot;Exiting Budget Management System. Goodbye!&quot;);</span>
+<span class="nc" id="L287">    }</span>
+    
+    // Helper methods for user input
+    private double promptDouble(String prompt) {
+        while (true) {
+<span class="nc" id="L292">            System.out.print(prompt);</span>
+            try {
+<span class="nc" id="L294">                return Double.parseDouble(scanner.nextLine());</span>
+<span class="nc" id="L295">            } catch (NumberFormatException e) {</span>
+<span class="nc" id="L296">                System.out.println(&quot;Invalid number. Please try again.&quot;);</span>
+<span class="nc" id="L297">            }</span>
+        }
+    }
+    
+    private String promptString(String prompt) {
+<span class="nc" id="L302">        System.out.print(prompt);</span>
+<span class="nc" id="L303">        return scanner.nextLine().trim();</span>
+    }
+    
+    private LocalDateTime promptDateTime() {
+<span class="nc" id="L307">        LocalDate date = promptDate(&quot;Date (yyyy-mm-dd): &quot;);</span>
+<span class="nc" id="L308">        LocalTime time = promptTime(&quot;Time (hh:mm): &quot;);</span>
+<span class="nc" id="L309">        return LocalDateTime.of(date, time);</span>
+    }
+    
+    private LocalDateTime promptDateTime(String prompt) {
+<span class="nc" id="L313">        LocalDate date = promptDate(prompt);</span>
+<span class="nc" id="L314">        return LocalDateTime.of(date, LocalTime.MIDNIGHT);</span>
+    }
+    
+    private LocalDate promptDate(String prompt) {
+        while (true) {
+<span class="nc" id="L319">            System.out.print(prompt);</span>
+            try {
+<span class="nc" id="L321">                return LocalDate.parse(scanner.nextLine(), DATE_FORMAT);</span>
+<span class="nc" id="L322">            } catch (DateTimeParseException e) {</span>
+<span class="nc" id="L323">                System.out.println(&quot;Invalid date format. Please use yyyy-mm-dd.&quot;);</span>
+<span class="nc" id="L324">            }</span>
+        }
+    }
+    
+    private LocalTime promptTime(String prompt) {
+        while (true) {
+<span class="nc" id="L330">            System.out.print(prompt);</span>
+            try {
+<span class="nc" id="L332">                return LocalTime.parse(scanner.nextLine(), TIME_FORMAT);</span>
+<span class="nc" id="L333">            } catch (DateTimeParseException e) {</span>
+<span class="nc" id="L334">                System.out.println(&quot;Invalid time format. Please use hh:mm.&quot;);</span>
+<span class="nc" id="L335">            }</span>
+        }
+    }
+    
+    private Expense.PaymentMethod promptPaymentMethod() {
+        while (true) {
+<span class="nc" id="L341">            System.out.print(&quot;Payment method (CASH/CARD/ALIPAY/WECHAT): &quot;);</span>
+<span class="nc" id="L342">            String input = scanner.nextLine().trim().toUpperCase();</span>
+            try {
+<span class="nc" id="L344">                return Expense.PaymentMethod.valueOf(input);</span>
+<span class="nc" id="L345">            } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L346">                System.out.println(&quot;Invalid payment method. Please try again.&quot;);</span>
+            }
+<span class="nc" id="L348">        }</span>
+    }
+    
+    private String promptCategory() {
+<span class="nc" id="L352">        List&lt;BudgetCategory&gt; categories = manager.getAllCategories();</span>
+        
+        while (true) {
+<span class="nc" id="L355">            System.out.println(&quot;Available categories:&quot;);</span>
+<span class="nc bnc" id="L356" title="All 2 branches missed.">            for (int i = 0; i &lt; categories.size(); i++) {</span>
+<span class="nc" id="L357">                System.out.printf(&quot;%d. %s\n&quot;, i + 1, categories.get(i).getName());</span>
+            }
+            
+<span class="nc" id="L360">            System.out.print(&quot;Enter category name or number: &quot;);</span>
+<span class="nc" id="L361">            String input = scanner.nextLine().trim();</span>
+            
+            // Check if input is a number
+            try {
+<span class="nc" id="L365">                int index = Integer.parseInt(input) - 1;</span>
+<span class="nc bnc" id="L366" title="All 4 branches missed.">                if (index &gt;= 0 &amp;&amp; index &lt; categories.size()) {</span>
+<span class="nc" id="L367">                    return categories.get(index).getName();</span>
+                }
+<span class="nc" id="L369">            } catch (NumberFormatException e) {</span>
+                // Not a number, proceed to check name
+<span class="nc" id="L371">            }</span>
+            
+            // Check if input matches a category name
+<span class="nc bnc" id="L374" title="All 2 branches missed.">            for (BudgetCategory cat : categories) {</span>
+<span class="nc bnc" id="L375" title="All 2 branches missed.">                if (cat.getName().equalsIgnoreCase(input)) {</span>
+<span class="nc" id="L376">                    return cat.getName();</span>
+                }
+<span class="nc" id="L378">            }</span>
+            
+<span class="nc" id="L380">            System.out.println(&quot;Invalid category. Please try again.&quot;);</span>
+<span class="nc" id="L381">        }</span>
+    }
+    
+    public static void main(String[] args) {
+<span class="nc" id="L385">        new BudgetCLI().start();</span>
+<span class="nc" id="L386">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

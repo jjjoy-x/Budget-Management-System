@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BudgetManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CPT206CW</a> &gt; <a href="index.source.html" class="el_package">cpt206cw3</a> &gt; <span class="el_source">BudgetManager.java</span></div><h1>BudgetManager.java</h1><pre class="source lang-java linenums">package cpt206cw3;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class BudgetManager {
+
+    private final List&lt;Transaction&gt; transactions;
+    
+    private final Map&lt;String, BudgetCategory&gt; categories;
+    
+<span class="fc" id="L17">    public BudgetManager() {</span>
+<span class="fc" id="L18">        this.transactions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L19">        this.categories = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L20">    }</span>
+    
+    public void addIncome(double amount, LocalDateTime dateTime, String source) {
+<span class="fc" id="L23">        Income income = new Income(amount, dateTime, source);</span>
+<span class="fc" id="L24">        transactions.add(income);</span>
+<span class="fc" id="L25">    }</span>
+    
+    public void resetCategoriesIfNewMonth(LocalDateTime now) {
+<span class="fc" id="L28">        int month = now.getMonthValue();</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        for (BudgetCategory cat : categories.values()) {</span>
+<span class="fc" id="L30">            cat.autoResetIfNewMonth(month);</span>
+<span class="fc" id="L31">        }</span>
+<span class="fc" id="L32">    }</span>
+
+    public void addExpense(double amount, LocalDateTime dateTime, 
+                         Expense.PaymentMethod method, String categoryName) 
+        throws MonthlyLimitExceededException {
+        
+<span class="fc" id="L38">        resetCategoriesIfNewMonth(dateTime);</span>
+        
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (!categories.containsKey(categoryName)) {</span>
+<span class="fc" id="L41">            throw new IllegalArgumentException(&quot;Category does not exist: &quot; + categoryName);</span>
+        }
+        
+<span class="fc" id="L44">        BudgetCategory category = categories.get(categoryName);</span>
+<span class="fc" id="L45">        Expense expense = new Expense(amount, dateTime, method, categoryName);</span>
+        
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (category.getCurrentExpenditure() + expense.getAmount() &gt; category.getMonthlyLimit()) {</span>
+<span class="fc" id="L48">            throw new MonthlyLimitExceededException(</span>
+                categoryName, 
+<span class="fc" id="L50">                category.getMonthlyLimit(), </span>
+<span class="fc" id="L51">                category.getCurrentExpenditure() + expense.getAmount());</span>
+        }
+        
+<span class="fc" id="L54">        transactions.add(expense);</span>
+<span class="fc" id="L55">        category.addExpense(expense.getAmount());</span>
+<span class="fc" id="L56">    }</span>
+    
+    public void addCategory(String name, double monthlyLimit) {
+<span class="pc bpc" id="L59" title="1 of 4 branches missed.">        if (name == null || name.trim().isEmpty()) {</span>
+<span class="fc" id="L60">            throw new IllegalArgumentException(&quot;Category name cannot be null or empty&quot;);</span>
+        }
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (monthlyLimit &lt;= 0) {</span>
+<span class="fc" id="L63">            throw new IllegalArgumentException(&quot;Monthly limit must be positive&quot;);</span>
+        }
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (categories.containsKey(name)) {</span>
+<span class="fc" id="L66">            throw new IllegalArgumentException(&quot;Category already exists: &quot; + name);</span>
+        }
+<span class="fc" id="L68">        categories.put(name, new BudgetCategory(name, monthlyLimit));</span>
+<span class="fc" id="L69">    }</span>
+    
+    public void removeCategory(String name) {
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (!categories.containsKey(name)) {</span>
+<span class="nc" id="L73">            throw new IllegalArgumentException(&quot;Category does not exist: &quot; + name);</span>
+        }
+<span class="fc" id="L75">        categories.remove(name);</span>
+<span class="fc" id="L76">    }</span>
+    
+    public List&lt;Expense&gt; getExpensesByCategory(String categoryName) {
+<span class="fc" id="L79">        List&lt;Expense&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for (Transaction t : transactions) {</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            if (t instanceof Expense) {</span>
+<span class="fc" id="L82">                Expense e = (Expense) t;</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">                if (e.getCategory().equals(categoryName)) {</span>
+<span class="fc" id="L84">                    result.add(e);</span>
+                }
+            }
+<span class="fc" id="L87">        }</span>
+<span class="fc" id="L88">        sortByDateTime(result);</span>
+<span class="fc" id="L89">        return result;</span>
+    }
+    
+    public List&lt;Expense&gt; getExpensesExceedingAmount(double amount) {
+<span class="fc" id="L93">        List&lt;Expense&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for (Transaction t : transactions) {</span>
+<span class="pc bpc" id="L95" title="1 of 4 branches missed.">            if (t instanceof Expense &amp;&amp; t.getAmount() &gt; amount) {</span>
+<span class="fc" id="L96">                result.add((Expense) t);</span>
+            }
+<span class="fc" id="L98">        }</span>
+<span class="fc" id="L99">        sortByDateTime(result);</span>
+<span class="fc" id="L100">        return result;</span>
+    }
+    
+    public List&lt;Transaction&gt; getTransactionsInPeriod(LocalDateTime start, LocalDateTime end) {
+<span class="fc" id="L104">        List&lt;Transaction&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        for (Transaction t : transactions) {</span>
+<span class="pc bpc" id="L106" title="1 of 4 branches missed.">            if (!t.getDateTime().isBefore(start) &amp;&amp; !t.getDateTime().isAfter(end)) {</span>
+<span class="fc" id="L107">                result.add(t);</span>
+            }
+<span class="fc" id="L109">        }</span>
+<span class="fc" id="L110">        sortByDateTime(result);</span>
+<span class="fc" id="L111">        return result;</span>
+    }
+    
+    public double getNetEarnings(LocalDateTime start, LocalDateTime end) {
+<span class="fc" id="L115">        double total = 0;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (Transaction t : getTransactionsInPeriod(start, end)) {</span>
+<span class="fc" id="L117">            total += t.getEffectiveAmount();</span>
+<span class="fc" id="L118">        }</span>
+<span class="fc" id="L119">        return total;</span>
+    }
+    
+    private &lt;T extends Transaction&gt; void sortByDateTime(List&lt;T&gt; transactions) {
+<span class="fc" id="L123">        Collections.sort(transactions, Comparator.comparing(Transaction::getDateTime));</span>
+<span class="fc" id="L124">    }</span>
+    
+    public List&lt;BudgetCategory&gt; getAllCategories() {
+<span class="nc" id="L127">        return new ArrayList&lt;&gt;(categories.values());</span>
+    }
+    
+    public List&lt;Transaction&gt; getAllTransactions() {
+<span class="fc" id="L131">        return new ArrayList&lt;&gt;(transactions);</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

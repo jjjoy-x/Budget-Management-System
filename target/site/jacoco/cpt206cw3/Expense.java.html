@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Expense.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CPT206CW</a> &gt; <a href="index.source.html" class="el_package">cpt206cw3</a> &gt; <span class="el_source">Expense.java</span></div><h1>Expense.java</h1><pre class="source lang-java linenums">package cpt206cw3;
+
+import java.time.LocalDateTime;
+
+public class Expense extends Transaction {
+
+<span class="fc" id="L7">    public enum PaymentMethod {</span>
+<span class="fc" id="L8">        CASH(0), </span>
+<span class="fc" id="L9">        CARD(0.01), </span>
+<span class="fc" id="L10">        ALIPAY(0.005), </span>
+<span class="fc" id="L11">        WECHAT(0.005);</span>
+        
+        private final double feePercentage;
+        
+<span class="fc" id="L15">        PaymentMethod(double feePercentage) {</span>
+<span class="fc" id="L16">            this.feePercentage = feePercentage;</span>
+<span class="fc" id="L17">        }</span>
+        
+        public double getFeePercentage() {
+<span class="fc" id="L20">            return feePercentage;</span>
+        }
+    }
+    
+    private final PaymentMethod paymentMethod;
+    private final String category;
+    
+    public Expense(double amount, LocalDateTime dateTime, 
+                  PaymentMethod paymentMethod, String category) {
+<span class="fc" id="L29">        super(amount, dateTime);</span>
+<span class="fc" id="L30">        this.paymentMethod = paymentMethod;</span>
+<span class="fc" id="L31">        this.category = category;</span>
+<span class="fc" id="L32">    }</span>
+    
+    public PaymentMethod getPaymentMethod() {
+<span class="fc" id="L35">        return paymentMethod;</span>
+    }
+    
+    public String getCategory() {
+<span class="fc" id="L39">        return category;</span>
+    }
+    
+    @Override
+    public double getEffectiveAmount() {
+<span class="fc" id="L44">        double fee = getAmount() * paymentMethod.getFeePercentage();</span>
+<span class="fc" id="L45">        return -(getAmount() + fee); // Expense is always negative</span>
+    }
+    
+    @Override
+    public String toString() {
+<span class="nc" id="L50">        return String.format(&quot;Expense[%s, method=%s, category=%s]&quot;, </span>
+<span class="nc" id="L51">            super.toString(), paymentMethod, category);</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

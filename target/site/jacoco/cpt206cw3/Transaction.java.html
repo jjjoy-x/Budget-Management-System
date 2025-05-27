@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Transaction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CPT206CW</a> &gt; <a href="index.source.html" class="el_package">cpt206cw3</a> &gt; <span class="el_source">Transaction.java</span></div><h1>Transaction.java</h1><pre class="source lang-java linenums">package cpt206cw3;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public abstract class Transaction {
+    
+    private final UUID id;
+    private final double amount;
+    private final LocalDateTime dateTime;
+    
+<span class="fc" id="L12">    public Transaction(double amount, LocalDateTime dateTime) {</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">        if (amount &lt;= 0) {</span>
+<span class="fc" id="L14">            throw new IllegalArgumentException(&quot;Amount must be positive&quot;);</span>
+        }
+<span class="fc" id="L16">        this.id = UUID.randomUUID();</span>
+<span class="fc" id="L17">        this.amount = amount;</span>
+<span class="fc" id="L18">        this.dateTime = dateTime;</span>
+<span class="fc" id="L19">    }</span>
+    
+    public UUID getId() {
+<span class="fc" id="L22">        return id;</span>
+    }
+    
+    public double getAmount() {
+<span class="fc" id="L26">        return amount;</span>
+    }
+    
+    public LocalDateTime getDateTime() {
+<span class="fc" id="L30">        return dateTime;</span>
+    }
+    
+    public abstract double getEffectiveAmount();
+    
+    @Override
+    public String toString() {
+<span class="nc" id="L37">        return String.format(&quot;Transaction[id=%s, amount=%.2f, dateTime=%s]&quot;, </span>
+<span class="nc" id="L38">            id, amount, dateTime);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
