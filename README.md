@@ -48,7 +48,7 @@ mvn compile
 
 ---
 
-## 🖥Running the Application
+## Running the Application
 
 To launch the command-line interface:
 
